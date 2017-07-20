@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="description" content="Udacity Blog" />
+    <title>Maria's Blog</title>
+    <link rel="stylesheet" href="static/css/base.css" />
+</head>
+<body>
+<div class="post">
+    <div class="post-heading">
+        <div class="post-title">
+            <a href="/blog/{{p.key().id()}}">{{p.subject}}</a>
+        </div>
+
+        <div class="post-date">
+            {{p.created.strftime("%d %B %Y")}} by: {{p.author}}
+        </div>
+    </div>
+
+    <div class="post-content">
+        {{p._render_text | safe}}
+    </div>
+<br>
+    <div class="post-comlike">
+        liked by:
+        {% for u in p.liked_by %}
+            {{u}}
+        {% endfor %}
+        <br>
+        likes: {{p.likes}}
+        <br>
+        comments: {{p.comments.count()}}
+    </div>
+</div>
+</body>
+</html>

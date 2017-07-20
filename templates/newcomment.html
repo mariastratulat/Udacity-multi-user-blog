@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>New Commnet</h2>
+<form method="post" class="comment">
+    <div class="commentpage-subject">
+        <a href="/blog/{{pkey.id()}}">{{subject}}</a>
+    </div>
+    <div>{{content}}</div>
+    <label>
+        <textarea class="comment-box" name="comment">{{comment}}</textarea>
+        <input type="hidden" name="author" value="{{user.name}}">
+    </label>
+
+    <div class="error">{{error}}</div>
+
+    <input type="submit">
+    <input type="button" class="button_active"
+           onclick="location.href='/blog/{{pkey.id()}}'" value="Cancel">
+</form>
+{% endblock %}

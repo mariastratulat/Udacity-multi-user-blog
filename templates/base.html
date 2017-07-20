@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Dog Lovers Blog</title>
+</head>
+<style type="text/css">
+body {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 14px;
+
+    width: 800px;
+    margin: 0 auto;
+    padding: 10px;
+    color: #333;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.link {
+    text-decoration: none;
+    list-style-type: none;
+    margin: auto;
+    text-align: right;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+.error {
+    color: red;
+}
+
+label {
+  display: block;
+  font-size: 20px;
+}
+
+label + label {
+    margin-top: 20px;
+}
+
+input[type=text] {
+    width: 500px;
+    font-size: 20px;
+    padding: 2px;
+    font-family: monospace;
+}
+
+textarea {
+  width: 500px;
+  height: 300px;
+  font-size: 17px;
+  font-family: monospace;
+}
+
+input[type=text-subject]{
+    width: 500px;
+    height: 24px;
+}
+
+input[type=submit] {
+  font-size: 20px;
+}
+
+input[type=button] {
+  font-size: 20px;
+}
+
+input[type=text], input[type=password]{
+    width: 200px;
+    font-family: sans-serif;
+    font-size: 15px;
+    padding: 3px;
+    border: 1px solid black;
+}
+
+.main-title {
+    display: block;
+    color: #222;
+    font-size: 40px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+    text-decoration: none;
+}
+
+.post + .post {
+    margin-top: 15px;
+}
+
+.post-heading {
+    position: relative;
+    border-bottom: 3px solid #666;
+}
+
+.post-title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.post-date {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    color: #999;
+}
+
+.post-content {
+    margin-top: 5px;
+}
+
+.post-comlike {
+    color: #999;
+}
+
+.greeting {
+    font-size: 24px;
+    text-align: center;
+}
+
+.subject {
+    font-weight: bold;
+}
+
+.comment-box {
+    height: 100px;
+    width: 200px;
+}
+
+.commentpage-subject {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.commentpage-content {
+    font-size: 14px;
+}
+
+</style>
+
+<body>
+<a href="/" class="main-title">
+    Dog Lovers
+</a>
+<ul class="link">
+    <li>
+        <a href="/blog">Home</a>
+        {% if user %}
+        <a href="/blog/newpost">New Post</a>
+        <a href="/logout">Logout</a>
+        {% else %}
+        <a href="/login">Login</a>
+        <a href="/signup">Signup</a>
+        {% endif %}
+    </li>
+</ul>
+<div id="content">
+    {% block content %}
+    {% endblock %}
+</div>
+</body>
+<html>
