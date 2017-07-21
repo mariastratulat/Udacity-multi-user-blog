@@ -266,7 +266,7 @@ class NewPost(BlogHandler):
 
     def post(self):
         if not self.user:
-            self.redirect('/blog')
+            return self.redirect('/login')
 
         subject = self.request.get('subject')
         content = self.request.get('content')
@@ -304,14 +304,18 @@ class EditPost(BlogHandler):
 
     def post(self, post_id):
         if not self.user:
-            self.redirect("/login")
+            self.redirect('/login')
         else:
             key = db.Key.from_path('Post', int(post_id), parent=blog_key())
-            p = db.get(key)
-            p.subject = self.request.get('subject')
-            p.content = self.request.get('content')
-            p.put()
-            self.redirect('/blog/%s' % str(p.key().id()))
+            post = db.get(key)
+            author = post.author
+            is_user = self.user.name
+
+            if post and author == is_user:
+                post.subject = self.request.get('subject')
+                post.content = self.request.get('content')
+                post.put()
+            self.redirect('/blog/%s' % str(post.key().id()))
 
 
 class DeletePost(BlogHandler):
@@ -393,6 +397,9 @@ class NewComment(BlogHandler):
                         content=content)
 
     def post(self, post_id):
+        if not self.user:
+            return self.redirect('/login')
+
         key = db.Key.from_path('Post', int(post_id), parent=blog_key())
         post = db.get(key)
         comment = self.request.get('comment')
@@ -419,8 +426,12 @@ class EditComment(BlogHandler):
             self.write('Something went wrong.')
 
     def post(self, post_id, comment_id):
+        if not self.user:
+            return self.redirect('/login')
+
         comment = Comment.get_by_id(int(comment_id), parent=self.user.key())
-        if comment.parent().key().id() == self.user.key().id():
+
+        if comment and comment.parent().key().id() == self.user.key().id():
             comment.comment = self.request.get('comment')
             comment.put()
         self.redirect('/blog/%s' % str(post_id))
