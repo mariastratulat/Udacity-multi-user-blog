@@ -270,7 +270,7 @@ class NewPost(BlogHandler):
 
         subject = self.request.get('subject')
         content = self.request.get('content')
-        author = self.request.get('author')
+        author = self.user.name
 
         if subject and content:
             p = Post(parent=blog_key(), subject=subject, author=author,
@@ -290,6 +290,9 @@ class EditPost(BlogHandler):
         else:
             key = db.Key.from_path('Post', int(post_id), parent=blog_key())
             post = db.get(key)
+            if not post:
+                return self.redirect('/blog/%s' % str(post.key().id()))
+
             author = post.author
             is_user = self.user.name
 
@@ -325,6 +328,8 @@ class DeletePost(BlogHandler):
         else:
             key = db.Key.from_path('Post', int(post_id), parent=blog_key())
             post = db.get(key)
+            if not post:
+                return self.redirect('/blog/%s' % str(post.key().id()))
             author = post.author
             is_user = self.user.name
 
@@ -391,6 +396,8 @@ class NewComment(BlogHandler):
             self.redirect("/login")
         else:
             post = Post.get_by_id(int(post_id), parent=blog_key())
+            if not post:
+                return self.redirect('/blog/%s' % str(post.key().id()))
             subject = post.subject
             content = post.content
             self.render("newcomment.html", subject=subject, pkey=post.key(),
@@ -419,7 +426,7 @@ class EditComment(BlogHandler):
     def get(self, post_id, comment_id):
         post = Post.get_by_id(int(post_id), parent=blog_key())
         comment = Comment.get_by_id(int(comment_id), parent=self.user.key())
-        if comment:
+        if comment and comment.parent().key().id() == self.user.key().id():
             self.render("editcomment.html", content=post.content,
                         subject=post.subject, comment=comment.comment)
         else:
